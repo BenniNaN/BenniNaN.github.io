@@ -1,0 +1,663 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Benjamin Haake</title>
+<meta name="description" content="Benjamin Haake: mathematician, AI safety novice, and community and mental health advocate in Edinburgh. About me, CVs and selected work.">
+
+<!--
+  HOW THIS PAGE IS ORGANISED
+    1. Header  - your name, a one-sentence intro and a photo.
+    2. Tabs    - a row of links. Each link opens one <section class="panel"> below.
+    3. Panels  - About, one panel per field, and CV.
+
+  TO ADD A TAB
+    a) Copy a whole field block, from <section ... id="mathematics"> to its </section>,
+       and give the copy a new id, e.g. id="teaching" (lowercase, no spaces).
+    b) Add a link to the tab row:
+       <li><a class="field" href="#teaching" style="--accent: var(--c4)">Teaching</a></li>
+    The script at the bottom picks up new panels by itself.
+
+  TO REMOVE A TAB
+    Delete its <section> block and its <li> in the tab row.
+
+  COLOURS
+    Each field has its own colour (--c1, --c2, --c3, --c4), set in :root below.
+    The same colour is used for that field's tab, links and CV button.
+
+  PHOTO
+    To show a photo instead of the initials, put it next to this file (e.g. photo.jpg)
+    and replace <div class="portrait" aria-hidden="true">BH</div> with
+    <img class="portrait" src="photo.jpg" alt="Benjamin Haake">
+
+  EMAIL
+    The email links are put together by the script at the bottom of this file, so the
+    address never appears as plain text in the page source (this deters spam bots).
+
+  CV FILES
+    The download buttons point to PDFs in the "CVs" folder next to this file,
+    e.g. CVs/Academic_CV.pdf. Names are case-sensitive once the site is online,
+    so if you rename a PDF, change its links here to match.
+-->
+
+<!-- Fonts come from Bunny Fonts, a privacy-friendly copy of Google Fonts -->
+<link rel="preconnect" href="https://fonts.bunny.net">
+<link rel="stylesheet" href="https://fonts.bunny.net/css?family=schibsted-grotesk:400,500,600,700,800">
+
+<style>
+  :root {
+    --paper: #ffffff;
+    --ink:   #1c2630;
+    --muted: #5a6570;
+    --rule:  #dde2e6;
+    --wash:  #f1f4f6;
+
+    /* one colour per field */
+    --c1: #0e6e66;   /* teal   - Mathematics   */
+    --c2: #3b4ca0;   /* indigo - AI safety     */
+    --c3: #8a3a68;   /* plum   - Mental health */
+    --c4: #8a5a00;   /* ochre  - spare, for a fourth field */
+
+    --font: "Schibsted Grotesk", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --measure: 40rem;
+  }
+
+  /* Dark mode: used automatically when the visitor's device is set to dark */
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #11171c;
+      --ink:   #e4e9ed;
+      --muted: #9aa5ae;
+      --rule:  #29323a;
+      --wash:  #182027;
+      --c1: #5ec4b9;
+      --c2: #a3aff2;
+      --c3: #e295c3;
+      --c4: #e0b25c;
+    }
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font);
+    font-size: 1.0625rem;
+    line-height: 1.6;
+  }
+  a { color: inherit; text-underline-offset: .2em; text-decoration-thickness: 1px; }
+  a:hover { text-decoration-thickness: 2px; }
+  a:focus-visible { outline: 2px solid var(--accent, var(--ink)); outline-offset: 3px; border-radius: 2px; }
+  [id] { scroll-margin-top: 4.5rem; }
+  .muted { color: var(--muted); }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+  .wrap { max-width: 60rem; margin: 0 auto; padding-left: 1.25rem; padding-right: 1.25rem; }
+
+  /* ---------- Header ---------- */
+  .intro {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    gap: 2rem;
+    padding-top: 5rem;
+    padding-bottom: 2.75rem;
+  }
+  .name {
+    margin: 0 0 1.25rem;
+    font-size: clamp(2.75rem, 8vw, 5.25rem);
+    font-weight: 800;
+    line-height: .95;
+    letter-spacing: -.035em;
+  }
+  .lede {
+    margin: 0;
+    max-width: 38ch;
+    font-size: clamp(1.15rem, 2.3vw, 1.45rem);
+    line-height: 1.45;
+  }
+  .lede a {
+    text-decoration-color: var(--accent);
+    text-decoration-thickness: .14em;
+    text-underline-offset: .18em;
+  }
+  .lede a:hover { color: var(--accent); }
+  .portrait {
+    display: grid;
+    place-items: center;
+    width: 9rem;
+    height: 9rem;
+    border-radius: 50%;
+    object-fit: cover;
+    background: var(--wash);
+    border: 1px solid var(--rule);
+    color: var(--muted);
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -.02em;
+  }
+
+  /* ---------- Tab row ---------- */
+  .tabs {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--paper);
+    border-bottom: 1px solid var(--rule);
+  }
+  .tabs ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 1.75rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .tabs a {
+    display: block;
+    padding: 1rem 0 .8rem;
+    border-bottom: 3px solid transparent;
+    color: var(--muted);
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .tabs a:hover { color: var(--ink); }
+  .tabs a[aria-current="page"] { color: var(--ink); border-bottom-color: var(--accent, var(--ink)); }
+  .tabs a:focus-visible { outline-offset: -2px; }
+  .tabs .field::before {
+    content: "";
+    display: inline-block;
+    width: .55rem;
+    height: .55rem;
+    margin-right: .5rem;
+    border-radius: 2px;
+    background: var(--accent);
+    vertical-align: .08em;
+  }
+
+  /* ---------- Panels ---------- */
+  main { padding-top: 3rem; padding-bottom: 5rem; }
+  .panel { max-width: var(--measure); }
+  .panel:focus { outline: none; }
+  .panel h2 {
+    margin: 0 0 1rem;
+    font-size: clamp(1.75rem, 3.6vw, 2.25rem);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -.02em;
+  }
+  .panel h3 { margin: 2.75rem 0 .75rem; font-size: 1.0625rem; font-weight: 700; }
+  .panel p { margin: 0 0 1rem; }
+  .panel a:not(.button) { text-decoration-color: var(--accent, currentColor); }
+
+  .now { margin: 0; padding-left: 1.2rem; }
+  .now li { margin-bottom: .35rem; }
+  .now li::marker { color: var(--muted); }
+
+  .contact { display: flex; flex-wrap: wrap; gap: .5rem 1.75rem; margin: 0; padding: 0; list-style: none; }
+
+  /* Lists of work, jobs and degrees: date on the left, details on the right */
+  .work { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--rule); }
+  .work li {
+    display: grid;
+    grid-template-columns: 6.5rem 1fr;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .work .when { color: var(--muted); font-variant-numeric: tabular-nums; }
+  .what { font-weight: 600; }
+  .work p, .cv-list p { margin: .2rem 0 0; color: var(--muted); }
+
+  /* CV download box at the bottom of a field panel */
+  .cv-get {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem 1.5rem;
+    margin-top: 3rem;
+    padding: 1.25rem 1.5rem;
+    border-radius: 10px;
+    background: var(--wash);
+  }
+  .cv-get p { margin: 0; }
+
+  .button {
+    display: inline-block;
+    padding: .6rem 1.1rem;
+    border-radius: 8px;
+    background: var(--accent, var(--ink));
+    color: var(--paper);
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .button:hover { filter: brightness(1.12); }
+
+  /* List of CV versions on the CV tab */
+  .cv-list { margin: 0 0 1rem; padding: 0; list-style: none; border-top: 1px solid var(--rule); }
+  .cv-list li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: .75rem 1.5rem;
+    padding: 1.1rem 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .small { font-size: .9375rem; }
+
+  /* ---------- Footer ---------- */
+  footer { padding-bottom: 3rem; color: var(--muted); font-size: .9375rem; }
+  footer p { margin: 0; padding-top: 1.5rem; border-top: 1px solid var(--rule); }
+
+  /* ---------- Small screens ---------- */
+  @media (max-width: 40rem) {
+    .intro { grid-template-columns: 1fr; gap: 1.5rem; padding-top: 2.5rem; padding-bottom: 2rem; }
+    .portrait { order: -1; width: 5.5rem; height: 5.5rem; font-size: 1.4rem; }
+    main { padding-top: 2.25rem; }
+    .tabs ul { gap: 0 1.4rem; }
+    .tabs a { padding: .7rem 0 .55rem; }
+  }
+  @media (max-width: 30rem) {
+    .work li { grid-template-columns: 1fr; gap: .15rem; }
+  }
+
+  /* A quick fade when switching tabs, unless the visitor prefers less motion */
+  @media (prefers-reduced-motion: no-preference) {
+    .panel.entering { animation: fade-in .2s ease-out; }
+    @keyframes fade-in { from { opacity: 0; } }
+  }
+
+  /* Printing the page prints every tab */
+  @media print {
+    .tabs { display: none; }
+    .panel[hidden] { display: block !important; margin-top: 2rem; }
+  }
+</style>
+</head>
+<body>
+
+<header class="wrap intro">
+  <div>
+    <h1 class="name">Benjamin Haake</h1>
+    <p class="lede">
+      I’m a <a href="#mathematics" style="--accent: var(--c1)">mathematician</a>,
+      <a href="#ai-safety" style="--accent: var(--c2)">AI&nbsp;safety&nbsp;novice</a>, and
+      <a href="#mental-health" style="--accent: var(--c3)">advocate for community&nbsp;and mental&nbsp;health</a>, based in Edinburgh, UK.
+    </p>
+  </div>
+  <div class="portrait" aria-hidden="true">BH</div>
+</header>
+
+<nav class="tabs" aria-label="Sections">
+  <div class="wrap">
+    <ul>
+      <li><a href="#about">About</a></li>
+      <li><a class="field" href="#mathematics" style="--accent: var(--c1)">Mathematics</a></li>
+      <li><a class="field" href="#ai-safety" style="--accent: var(--c2)">AI safety</a></li>
+      <li><a class="field" href="#mental-health" style="--accent: var(--c3)">Community and mental health</a></li>
+      <li><a href="#cv">CV</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="wrap">
+
+  <!-- ==================== ABOUT ==================== -->
+  <section class="panel" id="about" tabindex="-1" aria-labelledby="about-h">
+    <h2 id="about-h">About me</h2>
+    <p>I’m Benni, a mathematician who recently completed a PhD in Edinburgh and has started working on AI safety. I spend most of my time untangling complex issues and building systems that work for people.</p>
+    <p>I’m driven by two desires: to understand and to help. The first led me to study physics and maths, and keeps motivating me to learn and to grow. The second has come to matter more and more: I want to help others and to work together towards shared goals. Over the last few years, I have built support structures for week-long academies, and more recently I have turned to AI safety, where the two come together.</p>
+    <p>I’m currently looking for my next role in AI safety research or in work that combines careful analytical thinking with supporting people. If that sounds like something you’re working on, <a href="#about" data-email-user="ben_haake" data-email-domain="web.de">get in touch</a>.</p>
+    <p>I also play the piano, the double bass, and video games, and I sing, climb, dance, and read.</p>
+
+    <h3>Recently</h3>
+    <ul class="now">
+      <li>Completed my PhD in mathematics at the University of Edinburgh</li>
+      <li>Took part in the Iliad Intensive on the foundations of AI safety in London</li>
+      <li>Volunteering on inclusivity, safer spaces and mental health support at CdE academies</li>
+    </ul>
+
+    <h3>Get in touch</h3>
+    <ul class="contact">
+      <li><a href="#about" data-email-user="ben_haake" data-email-domain="web.de" data-email-show>Email</a></li>
+      <li><a href="https://github.com/BenniNaN">GitHub</a></li>
+      <li><a href="https://github.com/BenniNAI">GitHub (AI projects)</a></li>
+    </ul>
+  </section>
+
+  <!-- ==================== FIELD: MATHEMATICS ====================
+       Copy everything from here to the matching </section> to make a new field tab. -->
+  <section class="panel" id="mathematics" tabindex="-1" aria-labelledby="mathematics-h" style="--accent: var(--c1)">
+    <h2 id="mathematics-h">Mathematics</h2>
+    <p>I completed my PhD in mathematics at the University of Edinburgh in 2026, supervised by Tudor Dimofte. My research is on topological quantum field theories (TQFTs) and generalised symmetries, in particular on when and how these symmetries can be gauged.</p>
+    <p>Before Edinburgh, I studied physics at Heidelberg University, where I wrote my Master’s thesis on higher gauge theory.</p>
+
+    <h3>Papers</h3>
+    <!-- Newest first -->
+    <ul class="work">
+      <li>
+        <span class="when">2026</span>
+        <div><a class="what" href="https://arxiv.org/abs/2605.16942">Gauging 0-form, 1-form and 2-group symmetries in Reshetikhin–Turaev theories</a>
+          <p>arXiv preprint. Develops tools for computing examples and connects the earlier construction to zesting, with examples including Tambara–Yamagami categories, Dijkgraaf–Witten gauge theories and anomalies in Chern–Simons theory.</p></div>
+      </li>
+      <li>
+        <span class="when">2025</span>
+        <div><a class="what" href="https://arxiv.org/abs/2506.08178">2-Group Symmetries of 3-dimensional Defect TQFTs and Their Gauging</a>
+          <p>With Nils Carqueville. arXiv preprint. Shows that these symmetries can be gauged to give new TQFTs exactly when certain defects satisfy the axioms of orbifold data.</p></div>
+      </li>
+    </ul>
+
+    <h3>Theses</h3>
+    <ul class="work">
+      <li>
+        <span class="when">2026</span>
+        <div><a class="what" href="https://doi.org/10.7488/era/7865">Generalised symmetries, orbifold data, and gauging</a>
+          <p>PhD thesis, University of Edinburgh. Supervised by Tudor Dimofte.</p></div>
+      </li>
+      <li>
+        <span class="when">2021</span>
+        <div><span class="what">Higher Gauge Theory and Its Applications</span>
+          <p>Master’s thesis, Heidelberg University. Supervised by Prof. Johannes Walcher.</p></div>
+      </li>
+      <li>
+        <span class="when">2018</span>
+        <div><span class="what">General Relativity in the Framework of Principal Bundles and Einstein–Cartan Theory as a Gauge Theory</span>
+          <p>Bachelor’s thesis, Heidelberg University. Supervised by Prof. Matthias Bartelmann.</p></div>
+      </li>
+    </ul>
+
+    <h3>Talks</h3>
+    <ul class="work">
+      <li>
+        <span class="when">Nov 2025</span>
+        <div><span class="what">Gauging Higher-Group Symmetries</span>
+          <p><a href="https://www.agq-cdt.org/events/student-conference-2025/">AGQ Student Conference</a>, Glasgow</p></div>
+      </li>
+      <li>
+        <span class="when">May 2025</span>
+        <div><a class="what" href="https://bimsa.net/talk.html?id=52061">Gauging 2-group Symmetries in 3d via Orbifold Data</a>
+          <p><a href="https://bimsa.net/activity/BIMTQFandHigSymSem">TQFT and Higher Symmetries Seminar</a>, Beijing Institute of Mathematical Sciences and Applications (online). <a href="https://bimsa.net/bimsavideo.html?id=52061.mp4">Watch the recording</a></p></div>
+      </li>
+      <li>
+        <span class="when">Apr 2025</span>
+        <div><span class="what">Higher-form Symmetries and How to Gauge Them</span>
+          <p><a href="https://mathphys.univie.ac.at/seminars/">Mathematical Physics Seminar</a>, University of Vienna</p></div>
+      </li>
+      <li>
+        <span class="when">Feb 2025</span>
+        <div><span class="what">Koszul duality and the Deligne category</span>
+          <p><a href="https://sites.google.com/view/griftseminar/group-meetings">GRIFT Seminar</a>, University of Edinburgh (two sessions)</p></div>
+      </li>
+      <li>
+        <span class="when">Apr 2024</span>
+        <div><span class="what">The Geometry of the BV-formalism: Supermanifolds and Symplectic Geometry</span>
+          <p><a href="https://sites.google.com/view/griftseminar/group-meetings">GRIFT Seminar</a>, University of Edinburgh</p></div>
+      </li>
+      <li>
+        <span class="when">Jun 2023</span>
+        <div><span class="what">Introduction to Generalised Symmetries</span>
+          <p>Mathematical Physics Seminar, Heidelberg University</p></div>
+      </li>
+      <li>
+        <span class="when">May 2023</span>
+        <div><a class="what" href="https://higgs.ph.ed.ac.uk/event/from-landau-ginzburg-to-matrix-factorisations-and-tqft/">From Landau–Ginzburg to Matrix factorisations and TQFT</a>
+          <p><a href="https://higgs.ph.ed.ac.uk/events/stamp/">STAMP Seminar</a>, University of Edinburgh</p></div>
+      </li>
+      <li>
+        <span class="when">Mar 2023</span>
+        <div><span class="what">2-groups and Internalisation</span>
+          <p>GlaMS Example Showcase, Glasgow-Maxwell School, Glasgow</p></div>
+      </li>
+      <li>
+        <span class="when">Nov 2022</span>
+        <div><span class="what">Dijkgraaf–Witten theory</span>
+          <p><a href="https://sites.google.com/view/griftseminar/group-meetings">GRIFT Seminar</a>, University of Edinburgh (two sessions)</p></div>
+      </li>
+    </ul>
+
+    <h3>Teaching and organising</h3>
+    <ul class="work">
+      <li>
+        <span class="when">2023–now</span>
+        <div><span class="what">Tutor, University of Edinburgh</span>
+          <p>Fundamentals of Pure Mathematics, Introduction to Linear Algebra, Proofs and Problem Solving, Honours Analysis Presentation Skills, and the MathsBase drop-in study space.</p></div>
+      </li>
+      <li>
+        <span class="when">2023–2024</span>
+        <div><span class="what">Seminar organiser, University of Edinburgh</span>
+          <p>Ran the <a href="https://higgs.ph.ed.ac.uk/events/the-fox-hedgehog-seminar-series">Fox &amp; Hedgehog Seminar</a>, which gives early postgraduate students insight into big-picture problems at the intersection of mathematics and physics.</p></div>
+      </li>
+      <li>
+        <span class="when">2025–26</span>
+        <div><span class="what">Course instructor, CdE Winter Academy</span>
+          <p>An introductory course on algebra and group theory and an advanced course on representation theory of finite groups and category theory (about 20 hours each), for students with no maths background or at undergraduate level.</p></div>
+      </li>
+      <li>
+        <span class="when">2018–2020</span>
+        <div><span class="what">Tutor, Heidelberg University</span>
+          <p>Theoretical Physics 2, General Relativity, and Advanced Mathematics for Physicists 2.</p></div>
+      </li>
+      <li>
+        <span class="when">2018–19</span>
+        <div><span class="what">Course instructor, CdE Winter Academy</span>
+          <p>A 40-hour course on differential geometry for students just starting university: manifolds, vector bundles, tensor fields and Lie groups.</p></div>
+      </li>
+    </ul>
+
+    <p class="small muted" style="margin-top: 1.5rem">My academic CV also lists the schools and conferences I’ve attended, including programmes at the Isaac Newton Institute in Cambridge and IHES in Paris.</p>
+
+    <div class="cv-get">
+      <p><span class="what">Academic CV</span><br><span class="muted">Education, papers, talks, teaching, schools and conferences</span></p>
+      <a class="button" href="CVs/Academic_CV.pdf">Download <span class="sr">academic CV as </span>PDF</a>
+    </div>
+  </section>
+
+  <!-- ==================== FIELD: AI SAFETY ==================== -->
+  <section class="panel" id="ai-safety" tabindex="-1" aria-labelledby="ai-safety-h" style="--accent: var(--c2)">
+    <h2 id="ai-safety-h">AI safety</h2>
+    <p>I have been interested in AI and AI safety since the mid-2010s, but only recently started working in the field more formally, as I have grown increasingly worried about the dangers of AI becoming reality. If you have an opportunity for me or you might be interested in collaborating, <a href="#ai-safety" data-email-user="ben_haake" data-email-domain="web.de">contact me</a>!</p>
+
+    <h3>Courses and workshops</h3>
+    <ul class="work">
+      <li>
+        <span class="when">Sep 2026</span>
+        <div><a class="what" href="https://www.iliad.ac/intensive">Iliad Intensive</a>
+          <p>One-month full-time course on the mathematical and conceptual foundations of AI safety, at <a href="https://www.safeai.org.uk/">LISA</a> in London.</p></div>
+      </li>
+      <li>
+        <span class="when">May 2026</span>
+        <div><a class="what" href="https://www.agq-cdt.org/events/maths-physics-and-ai-alignment/">Workshop: Maths, Physics, and AI Alignment</a>
+          <p>AGQ Centre for Doctoral Training, Edinburgh. Talks and discussions with speakers from UK AISI, Timaeus and Stormglass AI, among others.</p></div>
+      </li>
+      <li>
+        <span class="when">2025</span>
+        <div><a class="what" href="https://www.agq-cdt.org/training/advanced-research-computing-2025/">Course: Advanced Research Computing</a>
+          <p>AGQ Centre for Doctoral Training, Edinburgh. Applications of machine learning in PyTorch: particle physics, topological data analysis and geometric structures in biology.</p></div>
+      </li>
+      <li>
+        <span class="when">2017</span>
+        <div><span class="what">Course: Deep Learning</span>
+          <p>CdE Summer Academy, Bad Hersfeld. The mathematical foundations of neural networks, such as gradient descent, and simple convolutional networks for image recognition in TensorFlow.</p></div>
+      </li>
+    </ul>
+
+    <p style="margin-top: 1.5rem">AI-related and AI-assisted projects are on <a href="https://github.com/BenniNAI">GitHub at BenniNAI</a>.</p>
+
+
+    <div class="cv-get">
+      <p><span class="what">AI safety CV</span><br><span class="muted">AI safety and machine learning training, research and teaching</span></p>
+      <a class="button" href="CVs/AI_safety_CV.pdf">Download <span class="sr">AI safety CV as </span>PDF</a>
+    </div>
+  </section>
+
+  <!-- ==================== FIELD: COMMUNITY AND MENTAL HEALTH ==================== -->
+  <section class="panel" id="mental-health" tabindex="-1" aria-labelledby="mental-health-h" style="--accent: var(--c3)">
+    <h2 id="mental-health-h">Community and mental health</h2>
+    <p>Community and mental health have been essential throughout my experiences in orchestras, in academia and among friends. Since my first academy in 2015, the CdE has been one of the places where I have found a lasting sense of community. I have volunteered much of my time building systems that support people at our events, whether with organisational problems, personal and mental health issues, or interpersonal conflicts. I have also completed training as a mental health first aider.</p>
+
+    <h3>What I do</h3>
+    <ul class="work">
+      <li>
+        <span class="when">2022–now</span>
+        <div><span class="what">Volunteer management, CdE academies</span>
+          <p>Set up and coordinate two volunteer teams at 20 events so far: a first point of contact for any issue, often mental health or interpersonal, and an on-call emergency team. This includes training volunteers in conversation skills and emergency protocols, and raising mental health awareness.</p></div>
+      </li>
+      <li>
+        <span class="when">2022–now</span>
+        <div><span class="what">Feedback, Awareness, Complaints and Intervention Teams, CdE</span>
+          <p>Leading roles in developing and running systems that foster inclusivity and safer spaces, with guidelines for organisers and course instructors and support for participants during and after events.</p></div>
+      </li>
+      <li>
+        <span class="when">2025</span>
+        <div><span class="what">Certified Mental Health First Aider</span>
+          <p>MHFA training, completed online.</p></div>
+      </li>
+      <li>
+        <span class="when">2024–25</span>
+        <div><span class="what">Organiser, CdE Winter Academy 2024/25</span>
+          <p>Assigned courses, rooms, materials and accommodation using a preferential voting system, managed the inventory, and arranged individual needs with course instructors and participants.</p></div>
+      </li>
+    </ul>
+
+    <h3>Organisations</h3>
+    <ul class="now">
+      <li><a href="https://cde-ev.de/english/">CdE</a>, the alumni association of the Deutsche SchülerAkademie, which runs the week-long academies I volunteer at</li>
+      <li><a href="https://mhfaengland.org/mhfa-centre/about/">Mental Health First Aid England</a> and <a href="https://www.mhfa-ersthelfer.de/de/was-ist-mhfa/">MHFA Ersthelfer</a> in Germany, who train mental health first aiders</li>
+      <li><a href="https://www.edinburghhsc.scot/mentalhealth/ithrive/">iThrive Edinburgh</a>, information on mental health and wellbeing services in Edinburgh, run by the charity Health in Mind</li>
+    </ul>
+
+    <div class="cv-get">
+      <p><span class="what">Volunteering CV</span><br><span class="muted">Community building, volunteer management and mental health first aid</span></p>
+      <a class="button" href="CVs/Volunteering_CV.pdf">Download <span class="sr">volunteering CV as </span>PDF</a>
+    </div>
+
+    <p class="small muted" style="margin-top: 2rem">If you’re struggling right now, you don’t have to wait. <a href="https://findahelpline.com">Find a free support line in your country</a>.</p>
+  </section>
+
+  <!-- ==================== CV ==================== -->
+  <section class="panel" id="cv" tabindex="-1" aria-labelledby="cv-h">
+    <h2 id="cv-h">CV</h2>
+    <p>Each version highlights different experience. Pick the one that matches why you’re here.</p>
+
+    <ul class="cv-list">
+      <li style="--accent: var(--c1)">
+        <div><span class="what">Academic CV</span><p>Education, papers, talks, teaching, schools and conferences</p></div>
+        <a class="button" href="CVs/Academic_CV.pdf">Download <span class="sr">academic CV as </span>PDF</a>
+      </li>
+      <li style="--accent: var(--c2)">
+        <div><span class="what">AI safety CV</span><p>AI safety and machine learning training, research and teaching</p></div>
+        <a class="button" href="CVs/AI_safety_CV.pdf">Download <span class="sr">AI safety CV as </span>PDF</a>
+      </li>
+      <li style="--accent: var(--c3)">
+        <div><span class="what">Volunteering CV</span><p>Community building, volunteer management and mental health first aid</p></div>
+        <a class="button" href="CVs/Volunteering_CV.pdf">Download <span class="sr">volunteering CV as </span>PDF</a>
+      </li>
+    </ul>
+    <p class="small muted">Last updated October 2026.</p>
+
+    <h3>At a glance</h3>
+    <ul class="work">
+      <li>
+        <span class="when">2022–2026</span>
+        <div><span class="what">PhD in Mathematics, University of Edinburgh</span>
+          <p>Thesis: <a href="https://doi.org/10.7488/era/7865">Generalised symmetries, orbifold data, and gauging</a>, supervised by Tudor Dimofte</p></div>
+      </li>
+      <li>
+        <span class="when">2018–2021</span>
+        <div><span class="what">MSc in Physics, Heidelberg University</span>
+          <p>Thesis: Higher Gauge Theory and Its Applications</p></div>
+      </li>
+      <li>
+        <span class="when">2015–2018</span>
+        <div><span class="what">BSc in Physics, Heidelberg University</span>
+          <p>Thesis on general relativity and Einstein–Cartan theory as a gauge theory</p></div>
+      </li>
+    </ul>
+  </section>
+
+</main>
+
+<footer class="wrap">
+  <p>© <span id="year">2026</span> Benjamin Haake</p>
+</footer>
+
+<script>
+  /* Tab switching. You shouldn't need to edit anything below.
+     Without this script the page still works: every section is shown, one after another. */
+  (function () {
+    const panels = Array.from(document.querySelectorAll('.panel'));
+    if (!panels.length) return;
+    const tabLinks = Array.from(document.querySelectorAll('.tabs a'));
+    const header = document.querySelector('header');
+    const baseTitle = document.title;
+
+    function panelFor(id) {
+      const el = id && document.getElementById(decodeURIComponent(id));
+      return el ? el.closest('.panel') : null;
+    }
+
+    function show(panel, animate) {
+      panels.forEach(p => { p.hidden = p !== panel; });
+      tabLinks.forEach(a => {
+        if (a.getAttribute('href') === '#' + panel.id) a.setAttribute('aria-current', 'page');
+        else a.removeAttribute('aria-current');
+      });
+      const heading = panel.querySelector('h2');
+      document.title = panel === panels[0] || !heading ? baseTitle : heading.textContent + ' – ' + baseTitle;
+      if (animate) {
+        panel.classList.remove('entering');
+        void panel.offsetWidth;
+        panel.classList.add('entering');
+      }
+    }
+
+    document.addEventListener('click', e => {
+      const link = e.target.closest('a[href^="#"]');
+      if (!link || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      const id = link.getAttribute('href').slice(1);
+      const panel = panelFor(id);
+      if (!panel) return;
+      e.preventDefault();
+      history.pushState(null, '', '#' + id);
+      show(panel, true);
+
+      const target = document.getElementById(id);
+      if (target !== panel) {
+        target.scrollIntoView();
+      } else {
+        const top = header.offsetHeight;
+        if (!link.closest('.tabs') || window.scrollY > top) {
+          const smooth = window.matchMedia('(prefers-reduced-motion: no-preference)').matches;
+          window.scrollTo({ top: top, behavior: smooth ? 'smooth' : 'auto' });
+        }
+        panel.focus({ preventScroll: true });
+      }
+    });
+
+    window.addEventListener('popstate', () => {
+      show(panelFor(location.hash.slice(1)) || panels[0], true);
+    });
+
+    show(panelFor(location.hash.slice(1)) || panels[0], false);
+
+    const year = document.getElementById('year');
+    if (year) year.textContent = new Date().getFullYear();
+
+    // Email links: the address is put together here, so it never appears in the page source
+    document.querySelectorAll('a[data-email-user]').forEach(a => {
+      const address = a.dataset.emailUser + '@' + a.dataset.emailDomain;
+      a.href = 'mailto:' + address;
+      if (a.hasAttribute('data-email-show')) a.textContent = address;
+    });
+  })();
+</script>
+</body>
+</html>
